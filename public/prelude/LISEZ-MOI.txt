@@ -1,0 +1,2 @@
+Photos du pré-accueil (src/app/prelude.ts), à déposer ici. Tant qu'elles manquent, le cadre reste vide.
+Noms attendus : 01-lancement.jpg, 02-sonde.jpg, 03-disque.jpg, 04-point-bleu.jpg

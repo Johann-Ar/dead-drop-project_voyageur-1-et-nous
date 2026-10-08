@@ -1,0 +1,672 @@
+{
+ "_meta": {
+  "description": "Recalage des 30 images NASA dans l'espace « trame » (364 pixels × 540 traces) des décodages de Ron Barry. frame_rect = [trace de départ, pixel de départ, largeur en traces, hauteur en pixels] ; nasa_crop = [x0,y0,x1,y1] dans le GIF NASA avant rotation.",
+  "methode": "corrélation normalisée des bords (dérivée le long des traces), recherche d'échelle x/y puis affinage",
+  "outil": "spatialbox/tools/recalage.py",
+  "verification": "recalage vérifié visuellement (superposition des bords) le 29/09/2026 : 28 paires valides, 2 exclues"
+ },
+ "paires": [
+  {
+   "id": "GR-008",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    43,
+    619,
+    435
+   ],
+   "frame_rect": [
+    80,
+    66,
+    455,
+    298
+   ],
+   "scale": [
+    0.785,
+    0.76
+   ],
+   "score": -0.137,
+   "note": "spectre solaire : presque aucun bord, recalage impossible",
+   "exclue": true
+  },
+  {
+   "id": "GR-009",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    43,
+    619,
+    435
+   ],
+   "frame_rect": [
+    112,
+    105,
+    418,
+    259
+   ],
+   "scale": [
+    0.885,
+    0.76
+   ],
+   "score": 0.069,
+   "note": "Mercure : l'image NASA est un recadrage différent de ce qui a été gravé",
+   "exclue": true
+  },
+  {
+   "id": "GR-010",
+   "orientation": 0,
+   "nasa_crop": [
+    47,
+    51,
+    593,
+    405
+   ],
+   "frame_rect": [
+    26,
+    31,
+    483,
+    296
+   ],
+   "scale": [
+    0.885,
+    0.8372
+   ],
+   "score": 0.346,
+   "exclue": false
+  },
+  {
+   "id": "GR-011",
+   "orientation": 2,
+   "nasa_crop": [
+    154,
+    30,
+    510,
+    456
+   ],
+   "frame_rect": [
+    82,
+    57,
+    339,
+    278
+   ],
+   "scale": [
+    0.795,
+    0.781
+   ],
+   "score": 0.286,
+   "exclue": false
+  },
+  {
+   "id": "GR-012",
+   "orientation": 2,
+   "nasa_crop": [
+    168,
+    28,
+    513,
+    460
+   ],
+   "frame_rect": [
+    70,
+    57,
+    369,
+    297
+   ],
+   "scale": [
+    0.855,
+    0.86
+   ],
+   "score": 0.471,
+   "exclue": false
+  },
+  {
+   "id": "GR-013",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    43,
+    610,
+    427
+   ],
+   "frame_rect": [
+    31,
+    45,
+    473,
+    306
+   ],
+   "scale": [
+    0.83,
+    0.7958
+   ],
+   "score": 0.218,
+   "exclue": false
+  },
+  {
+   "id": "GR-034",
+   "orientation": 1,
+   "nasa_crop": [
+    174,
+    1,
+    503,
+    478
+   ],
+   "frame_rect": [
+    11,
+    29,
+    498,
+    326
+   ],
+   "scale": [
+    1.045,
+    0.9914
+   ],
+   "score": 0.163,
+   "exclue": false
+  },
+  {
+   "id": "GR-063",
+   "orientation": 1,
+   "nasa_crop": [
+    170,
+    2,
+    489,
+    480
+   ],
+   "frame_rect": [
+    31,
+    28,
+    480,
+    324
+   ],
+   "scale": [
+    1.005,
+    1.015
+   ],
+   "score": 0.265,
+   "exclue": false
+  },
+  {
+   "id": "GR-072",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    0,
+    700,
+    570
+   ],
+   "frame_rect": [
+    112,
+    31,
+    340,
+    317
+   ],
+   "scale": [
+    0.515,
+    0.5556
+   ],
+   "score": 0.28,
+   "exclue": false
+  },
+  {
+   "id": "GR-073",
+   "orientation": 0,
+   "nasa_crop": [
+    78,
+    3,
+    572,
+    480
+   ],
+   "frame_rect": [
+    88,
+    16,
+    356,
+    336
+   ],
+   "scale": [
+    0.72,
+    0.7034
+   ],
+   "score": 0.291,
+   "exclue": false
+  },
+  {
+   "id": "GR-074",
+   "orientation": 0,
+   "nasa_crop": [
+    44,
+    32,
+    613,
+    463
+   ],
+   "frame_rect": [
+    53,
+    4,
+    467,
+    360
+   ],
+   "scale": [
+    0.82,
+    0.835
+   ],
+   "score": 0.14,
+   "exclue": false
+  },
+  {
+   "id": "GR-077",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    38,
+    618,
+    437
+   ],
+   "frame_rect": [
+    19,
+    12,
+    494,
+    347
+   ],
+   "scale": [
+    0.855,
+    0.8708
+   ],
+   "score": 0.235,
+   "exclue": false
+  },
+  {
+   "id": "GR-079",
+   "orientation": 0,
+   "nasa_crop": [
+    67,
+    3,
+    582,
+    480
+   ],
+   "frame_rect": [
+    108,
+    17,
+    366,
+    336
+   ],
+   "scale": [
+    0.71,
+    0.705
+   ],
+   "score": 0.22,
+   "exclue": false
+  },
+  {
+   "id": "GR-082",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    43,
+    619,
+    433
+   ],
+   "frame_rect": [
+    13,
+    26,
+    510,
+    333
+   ],
+   "scale": [
+    0.88,
+    0.8536
+   ],
+   "score": 0.242,
+   "exclue": false
+  },
+  {
+   "id": "GR-084",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    41,
+    619,
+    436
+   ],
+   "frame_rect": [
+    23,
+    7,
+    492,
+    342
+   ],
+   "scale": [
+    0.85,
+    0.8652
+   ],
+   "score": 0.212,
+   "exclue": false
+  },
+  {
+   "id": "GR-086",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    42,
+    619,
+    437
+   ],
+   "frame_rect": [
+    30,
+    23,
+    483,
+    330
+   ],
+   "scale": [
+    0.835,
+    0.835
+   ],
+   "score": 0.311,
+   "exclue": false
+  },
+  {
+   "id": "GR-088",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    43,
+    620,
+    435
+   ],
+   "frame_rect": [
+    34,
+    34,
+    487,
+    317
+   ],
+   "scale": [
+    0.84,
+    0.8098
+   ],
+   "score": 0.242,
+   "exclue": false
+  },
+  {
+   "id": "GR-093",
+   "orientation": 1,
+   "nasa_crop": [
+    163,
+    2,
+    485,
+    480
+   ],
+   "frame_rect": [
+    0,
+    16,
+    504,
+    333
+   ],
+   "scale": [
+    1.055,
+    1.035
+   ],
+   "score": 0.372,
+   "exclue": false
+  },
+  {
+   "id": "GR-094",
+   "orientation": 1,
+   "nasa_crop": [
+    165,
+    2,
+    479,
+    472
+   ],
+   "frame_rect": [
+    3,
+    16,
+    508,
+    345
+   ],
+   "scale": [
+    1.08,
+    1.0974
+   ],
+   "score": 0.33,
+   "exclue": false
+  },
+  {
+   "id": "GR-099",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    43,
+    618,
+    435
+   ],
+   "frame_rect": [
+    19,
+    15,
+    500,
+    333
+   ],
+   "scale": [
+    0.865,
+    0.85
+   ],
+   "score": 0.341,
+   "exclue": false
+  },
+  {
+   "id": "GR-100",
+   "orientation": 0,
+   "nasa_crop": [
+    72,
+    2,
+    573,
+    480
+   ],
+   "frame_rect": [
+    100,
+    11,
+    348,
+    342
+   ],
+   "scale": [
+    0.695,
+    0.716
+   ],
+   "score": 0.4,
+   "exclue": false
+  },
+  {
+   "id": "GR-101",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    41,
+    619,
+    438
+   ],
+   "frame_rect": [
+    19,
+    23,
+    472,
+    330
+   ],
+   "scale": [
+    0.815,
+    0.83
+   ],
+   "score": 0.259,
+   "exclue": false
+  },
+  {
+   "id": "GR-102",
+   "orientation": 1,
+   "nasa_crop": [
+    162,
+    2,
+    484,
+    480
+   ],
+   "frame_rect": [
+    21,
+    17,
+    502,
+    341
+   ],
+   "scale": [
+    1.05,
+    1.06
+   ],
+   "score": 0.274,
+   "exclue": false
+  },
+  {
+   "id": "GR-103",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    37,
+    619,
+    442
+   ],
+   "frame_rect": [
+    30,
+    32,
+    452,
+    318
+   ],
+   "scale": [
+    0.78,
+    0.785
+   ],
+   "score": 0.38,
+   "exclue": false
+  },
+  {
+   "id": "GR-106",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    41,
+    618,
+    440
+   ],
+   "frame_rect": [
+    23,
+    42,
+    491,
+    306
+   ],
+   "scale": [
+    0.85,
+    0.7676
+   ],
+   "score": 0.303,
+   "exclue": false
+  },
+  {
+   "id": "GR-110",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    50,
+    609,
+    432
+   ],
+   "frame_rect": [
+    36,
+    41,
+    461,
+    313
+   ],
+   "scale": [
+    0.81,
+    0.819
+   ],
+   "score": 0.401,
+   "exclue": false
+  },
+  {
+   "id": "GR-111",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    41,
+    618,
+    438
+   ],
+   "frame_rect": [
+    15,
+    12,
+    494,
+    337
+   ],
+   "scale": [
+    0.855,
+    0.85
+   ],
+   "score": 0.282,
+   "exclue": false
+  },
+  {
+   "id": "GR-112",
+   "orientation": 0,
+   "nasa_crop": [
+    40,
+    36,
+    607,
+    442
+   ],
+   "frame_rect": [
+    42,
+    13,
+    465,
+    345
+   ],
+   "scale": [
+    0.82,
+    0.8496
+   ],
+   "score": 0.397,
+   "exclue": false
+  },
+  {
+   "id": "GR-113",
+   "orientation": 1,
+   "nasa_crop": [
+    163,
+    25,
+    479,
+    477
+   ],
+   "frame_rect": [
+    45,
+    32,
+    468,
+    332
+   ],
+   "scale": [
+    1.035,
+    1.05
+   ],
+   "score": 0.265,
+   "exclue": false
+  },
+  {
+   "id": "GR-116",
+   "orientation": 2,
+   "nasa_crop": [
+    163,
+    1,
+    479,
+    478
+   ],
+   "frame_rect": [
+    25,
+    44,
+    506,
+    317
+   ],
+   "scale": [
+    1.06,
+    1.0032
+   ],
+   "score": 0.305,
+   "exclue": false
+  }
+ ]
+}

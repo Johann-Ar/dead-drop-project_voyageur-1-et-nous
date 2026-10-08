@@ -1,0 +1,2 @@
+Déposer ici les .woff2 de Steps Mono et Karrik (Velvetyne, OFL 1.1) avec leur fichier de licence.
+Noms attendus : StepsMono-Thin.woff2, StepsMono-Regular.woff2, Karrik-Regular.woff2, Karrik-Italic.woff2
