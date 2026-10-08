@@ -1,0 +1,76 @@
+{
+  "name": "Départ de calibration",
+  "description": "Point de départ de la recherche : niveaux et synchro mesurés sur le vrai signal, décodeur de Barry, canal modéré.",
+  "encode": {
+    "sampleRate": 384000,
+    "traces": 540,
+    "pixels": 364,
+    "period": 3195,
+    "alternation": 12.5,
+    "windowStart": 220,
+    "windowEnd": 2900,
+    "white": -0.112,
+    "black": 0.077,
+    "porch": -0.02,
+    "gamma": 1,
+    "sync": {
+      "length": 150,
+      "level": 0.084,
+      "leadSpike": 0.139,
+      "tailBump": 0.11,
+      "dip": -0.115,
+      "recovery": 20
+    },
+    "leadInTraces": 1
+  },
+  "channel": {
+    "highpass": {
+      "enabled": true,
+      "cutoffHz": 20
+    },
+    "lowpass": {
+      "enabled": true,
+      "cutoffHz": 40000,
+      "order": 2
+    },
+    "noise": {
+      "enabled": true,
+      "rms": 0.004,
+      "lowRms": 0,
+      "lowCutoffHz": 150,
+      "seed": 1977
+    },
+    "wowFlutter": {
+      "enabled": false,
+      "wowDepth": 2,
+      "wowRateHz": 0.55,
+      "flutterDepth": 0.6,
+      "flutterRateHz": 11,
+      "driftDepth": 1,
+      "seed": 1977
+    },
+    "evenOdd": {
+      "enabled": true,
+      "samples": -12
+    },
+    "rgbShift": {
+      "enabled": false,
+      "r": 0,
+      "g": 0,
+      "b": 0
+    }
+  },
+  "decode": {
+    "searchWindow": 190,
+    "minPeriod": 3000,
+    "traces": 540,
+    "pixels": 364,
+    "windowStart": 220,
+    "windowEnd": 2900,
+    "evenCorrection": 12,
+    "lower": -0.26,
+    "upper": 0.18,
+    "curve": "cosine",
+    "invert": true
+  }
+}

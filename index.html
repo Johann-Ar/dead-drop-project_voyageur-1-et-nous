@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="/disque/favicon.png" />
+  <link rel="apple-touch-icon" href="/disque/apple-touch-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>VOYAGEUR 1</title>
+  <meta name="description" content="Les images du Voyager Golden Record (1977), revenues sur Terre. Ajoute la tienne." />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/app.css" />
+</head>
+<body class="welcome">
+  <!-- grain de gravure : les bords des boutons et des icônes ne sont jamais parfaitement lisses -->
+  <div class="top-fade" aria-hidden="true"></div>
+  <header class="top">
+    <a class="brand" href="/" aria-label="VOYAGEUR 1, accueil">
+      <img class="disc" src="/disque/logo.png" alt="" width="60" height="60" />
+      <span class="titres"><span class="word">VOYAGEUR 1</span><span class="sous-titre">Et nous</span></span>
+    </a>
+    <div class="top-actions">
+    <button id="vue-btn" class="vue-btn grave" type="button" aria-pressed="false" aria-label="Afficher le disque">
+      <span class="vue-ic">
+      <svg class="i-disc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.2"/></svg>
+      <svg class="i-grid" viewBox="0 0 24 24"><rect x="4" y="5" width="7" height="6" rx="1.3"/><rect x="13" y="5" width="7" height="6" rx="1.3"/><rect x="4" y="13" width="7" height="6" rx="1.3"/><rect x="13" y="13" width="7" height="6" rx="1.3"/></svg>
+      </span>
+      <span class="vue-lbl"><span class="l-disc">Disque</span><span class="l-grid">Galerie</span></span>
+    </button>
+    <label class="add grave">
+      <input id="file" type="file" accept="image/*,audio/*" />
+      <span>Ajouter image ou son</span>
+    </label>
+    </div>
+  </header>
+
+  <main id="grid" class="grid" aria-label="Collection d'images"></main>
+  <main id="stage" class="stage" aria-label="Le disque et ses images" hidden></main>
+
+  <div id="viewer" class="viewer" hidden role="dialog" aria-modal="true" aria-label="Image en volume">
+    <canvas id="scene"></canvas>
+    <img id="fallback" class="fallback" alt="" hidden />
+  </div>
+
+  <div class="veil" aria-hidden="true"><span>Déposer la photo</span></div>
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+
+  <button id="settings-btn" class="settings-btn grave" aria-label="Réglages de rendu" aria-expanded="false">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>
+  </button>
+  <aside id="settings" class="settings" hidden></aside>
+
+  <footer class="foot">
+    Images : NASA / JPL, Voyager Golden Record, 1977 · décodage : Ron Barry, 2017 · <a href="/CREDITS.md" target="_blank">crédits</a>
+  </footer>
+
+  <script type="module" src="/src/app/main.ts"></script>
+</body>
+</html>

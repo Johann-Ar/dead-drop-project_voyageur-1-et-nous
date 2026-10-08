@@ -1,0 +1,76 @@
+{
+  "name": "Longue distance",
+  "description": "Barry 2017 poussé : couplage plus fort, bande passante étroite, souffle, pleurage et scintillement marqués, passages couleur désalignés. Ce qu'un disque plus abîmé ou lu de plus loin pourrait donner (fiction).",
+  "encode": {
+    "sampleRate": 384000,
+    "traces": 540,
+    "pixels": 364,
+    "period": 3195,
+    "alternation": 12.5,
+    "windowStart": 220,
+    "windowEnd": 2900,
+    "white": -0.067,
+    "black": 0.0245,
+    "porch": -0.02,
+    "gamma": 0.9,
+    "sync": {
+      "length": 150,
+      "level": 0.084,
+      "leadSpike": 0.139,
+      "tailBump": 0.11,
+      "dip": -0.115,
+      "recovery": 20
+    },
+    "leadInTraces": 1
+  },
+  "channel": {
+    "highpass": {
+      "enabled": true,
+      "cutoffHz": 407.3
+    },
+    "lowpass": {
+      "enabled": true,
+      "cutoffHz": 14000,
+      "order": 2
+    },
+    "noise": {
+      "enabled": true,
+      "rms": 0.012,
+      "lowRms": 0,
+      "lowCutoffHz": 150,
+      "seed": 1977
+    },
+    "wowFlutter": {
+      "enabled": true,
+      "wowDepth": 14,
+      "wowRateHz": 0.55,
+      "flutterDepth": 4,
+      "flutterRateHz": 9,
+      "driftDepth": 1,
+      "seed": 1977
+    },
+    "evenOdd": {
+      "enabled": true,
+      "samples": -18
+    },
+    "rgbShift": {
+      "enabled": true,
+      "r": -2.5,
+      "g": 0,
+      "b": 2.5
+    }
+  },
+  "decode": {
+    "searchWindow": 190,
+    "minPeriod": 3000,
+    "traces": 540,
+    "pixels": 364,
+    "windowStart": 220,
+    "windowEnd": 2900,
+    "evenCorrection": 12,
+    "lower": -0.26,
+    "upper": 0.18,
+    "curve": "cosine",
+    "invert": true
+  }
+}

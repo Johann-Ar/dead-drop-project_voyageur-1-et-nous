@@ -1,0 +1,263 @@
+/* DEADDROP — la page : une grille 2D, noire, sans texte. Le volume n'apparaît qu'à l'ouverture d'une image. */
+body { min-height: 100vh; -webkit-user-select: none; user-select: none; }   /* rien ne se surligne */
+input, textarea, select { -webkit-user-select: auto; user-select: auto; }
+/* fond : noir, poussières et fins défauts (peint au chargement, voir space.ts) */
+/* fond : une photo (ou un fond peint) et une couche de poussières, qui bougent très lentement */
+html, body { background: #050505; }
+body.space { background: #050505 var(--space) center / cover fixed no-repeat; }
+.scintille { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }   /* points de lumière qui scintillent (space.ts), sous l'interface */
+/* l'or du disque : toutes les images, quel que soit leur état */
+:root { --lumiere: #ffffff; --lueur: none;   /* un seul blanc pour tous les textes et icônes, sans lueur */ }
+/* boutons du haut : sans fond, juste le texte et l'icône */
+.grave { background: none; border: 0; box-shadow: none; color: var(--lumiere); text-shadow: var(--lueur); transition: opacity .25s; }   /* sans fond : juste le texte et l'icône, en blanc lumineux */
+.grave:focus-visible { outline: none; }
+/* au survol : le même reflet doré partout (titre, sous-titre, boutons, mots) ; les icônes reçoivent
+   exactement le même dégradé par reflet.ts */
+.brand .word, .brand .sous-titre, .add, .vue-btn .vue-lbl > span, .prelude .word, .prelude .sous-titre, .p-ecouter span { background: linear-gradient(125deg, var(--lumiere) 44.5%, #b9862c 47.3%, #f0bd52 48.4%, #fff3cf 49.4%, #ffffff 50%, #fff3cf 50.6%, #f0bd52 51.6%, #b9862c 52.7%, var(--lumiere) 55.5%) 100% 0 / 300% 100% no-repeat;   /* en diagonale, plus fin : ambre, or, cœur blanc */
+  -webkit-background-clip: text; background-clip: text; color: transparent !important; -webkit-text-fill-color: transparent; }
+.brand:hover .word, .add:hover, .vue-btn:hover .vue-lbl > span, .p-ecouter:hover span, .p-ecouter:focus-visible span { animation: reflet 1.25s cubic-bezier(.35, .1, .25, 1) 1; }
+.brand:hover .sous-titre { animation: reflet 1.25s cubic-bezier(.35, .1, .25, 1) .7s 1; }   /* « ET NOUS » : juste après « VOYAGEUR 1 » */
+@keyframes reflet { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+.grave svg { filter: drop-shadow(0 0 3px rgba(255, 255, 255, .35)); }
+/* arrivée : le recto du disque rejoint le logo */
+
+/* en-tête */
+.top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px clamp(16px, 3vw, 36px); background: linear-gradient(var(--noir) 60%, rgba(6, 6, 6, 0)); }
+.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--papier); }
+.brand:hover, .brand:active, .brand:focus, .brand:focus-visible, .brand:visited { color: var(--papier); outline: none; }   /* le titre ne change jamais de couleur */
+.brand .disc { width: 60px; height: 60px; display: block; border-radius: 50%; will-change: transform; }
+.brand .word { font: 400 32px 'Bagerich', var(--mono); letter-spacing: .1em; text-shadow: var(--lueur); }
+.brand .titres { display: flex; flex-direction: column; justify-content: center; gap: 0; line-height: .8; }   /* le bloc de texte est centré sur le petit disque */
+.brand .sous-titre { margin-top: -7px; font: 400 22px var(--mono);   /* Vargas */ -webkit-font-smoothing: antialiased; letter-spacing: .12em; text-transform: uppercase; color: var(--lumiere); text-shadow: var(--lueur); }
+
+.add { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 0; height: 48px; line-height: 1; border-radius: 2px;
+  color: var(--or); font: 16px var(--mono); letter-spacing: .12em; text-transform: uppercase; -webkit-text-stroke: .35px var(--lumiere); cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+.add::before { content: '+'; font-size: 30px; font-weight: 700; -webkit-text-stroke: 1.1px currentColor; line-height: 1; letter-spacing: 0; }   /* « + » un peu plus fin */
+.add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+body.busy .add { opacity: .35; pointer-events: none; }
+
+/* grille justifiée : chaque image garde son format, les lignes remplissent la largeur */
+.grid { position: relative; z-index: 5; min-height: 100vh; }   /* la galerie se pose PAR-DESSUS le disque, qui reste là dessous */
+.grid::before { content: ''; position: fixed; inset: 0; z-index: -1; background: #050505; pointer-events: none; }
+body.space .grid::before { background: #050505 var(--space) center / cover no-repeat; }
+.grid.cache { opacity: 0; pointer-events: none; }
+.grid.bascule { will-change: opacity; }
+.grid.bascule .cell { transition: none !important; }   /* pendant le fondu de la vue : un seul fondu, pas celui de chaque image */
+.grid { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px clamp(20px, 4vw, 56px) 90px; --h: clamp(112px, 14.5vw, 215px); }   /* images plus grandes, plus d'air entre elles */
+.cell { flex: var(--a) 1 calc(var(--a) * var(--h)); max-width: calc(var(--a) * var(--h) * 1.5); max-height: calc(var(--h) * 1.5); aspect-ratio: var(--a); position: relative; padding: 0; margin: 0; border: 0; border-radius: 7px; background: var(--noir-2);
+  cursor: zoom-in; overflow: hidden; opacity: 0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease; transition-delay: calc(var(--i) * 18ms); }
+.cell.in { opacity: 1; transform: none; }
+.cell img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(1); transition: filter .35s, transform .6s cubic-bezier(.2, .7, .2, 1); }
+.filler { flex: 1000 1 0; order: 99999999; }   /* toujours en dernier, même avec l'ordre au hasard : la dernière ligne ne s'étire pas */
+
+/* bascule grille / disque */
+.top-actions { display: flex; align-items: center; gap: 32px; height: 60px; transform: translateY(-11px); }   /* un peu plus haut : à hauteur de « VOYAGEUR 1 » */
+.vue-btn { position: relative; height: 48px; display: inline-flex; align-items: center; gap: 10px; padding: 0; line-height: 1; border-radius: 24px; cursor: pointer; }
+.vue-btn .vue-ic, .vue-btn .vue-lbl { display: grid; place-items: center; }
+.vue-btn .vue-ic > *, .vue-btn .vue-lbl > * { grid-area: 1 / 1; }
+.vue-btn .vue-lbl { justify-items: start; font: 16px var(--mono); letter-spacing: .12em; -webkit-text-stroke: .35px var(--lumiere); text-transform: uppercase; color: inherit; text-shadow: var(--lueur); }
+/* le mot suit l'icône : « Galerie » avec l'icône galerie (sur le disque), « Disque » avec l'icône disque (en galerie) */
+.vue-btn .l-grid, .vue-btn[aria-pressed="true"] .l-disc { opacity: 0; transition: opacity .35s ease; }
+.vue-btn .l-disc, .vue-btn[aria-pressed="true"] .l-grid { opacity: 1; transition: opacity .45s ease .35s; }
+.vue-btn svg { grid-area: 1 / 1; width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.1; }   /* icônes affinées */
+.vue-btn .i-grid { stroke-width: .9; }   /* icône galerie un peu plus fine */
+/* passage disque ⇄ galerie : l'icône s'efface doucement, PUIS l'autre apparaît doucement */
+.vue-btn .i-grid, .vue-btn[aria-pressed="true"] .i-disc { opacity: 0; transition: opacity .35s ease; }
+.vue-btn .i-disc, .vue-btn[aria-pressed="true"] .i-grid { opacity: 1; transition: opacity .45s ease .35s; }
+
+/* la scène : le disque en plongée en bas, ses images debout au-dessus */
+body.vue-disque, html:has(body.vue-disque) { height: 100%; overflow: hidden; overscroll-behavior: none; }
+body.vue-disque .top { position: fixed; left: 0; right: 0; }
+body.vue-disque .foot { z-index: 150; }
+.stage { position: fixed; inset: 0; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+  perspective: 1150px; perspective-origin: 50% 30%; }   /* plus de lueur dorée derrière le disque */
+.plane { position: absolute; width: 0; height: 0; transform-style: preserve-3d; transform: translateY(var(--rise, 0px)) rotateX(var(--tilt)); }
+.disc-body, .disc-edge, .disc-sheen { position: absolute; width: var(--D); height: var(--D); left: calc(var(--D) / -2); top: calc(var(--D) / -2); border-radius: 50%; }
+.disc-body { transform-style: preserve-3d; }
+.face { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateZ(var(--spin, 0deg)); }
+.face.verso { transform: rotateY(180deg) rotateZ(var(--spin, 0deg)); }
+/* épaisseur : la tranche du disque, juste dessous */
+.disc-edge { transform: translateZ(-9px); background: radial-gradient(circle, #3a2b10 0 96%, #7a5a22 98.5%, #2a1e09 100%); box-shadow: 0 40px 90px rgba(0, 0, 0, .9); }
+/* reflet fixe : la lumière ne tourne pas avec le disque */
+.disc-sheen { transform: translateZ(.6px); pointer-events: none;
+  background:
+    conic-gradient(from 210deg, rgba(255,250,235,0) 0deg, rgba(255,246,220,.16) 22deg, rgba(255,250,235,0) 55deg, rgba(0,0,0,.12) 120deg, rgba(255,250,235,0) 170deg, rgba(255,246,220,.12) 205deg, rgba(255,250,235,0) 240deg, rgba(0,0,0,.12) 300deg, rgba(255,250,235,0) 360deg),
+    radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,.28) 100%); }
+
+.shadows, .ring { position: absolute; transform-style: preserve-3d; }
+
+/* tirage type polaroid : cadre clair, titre en dessous */
+.card { position: absolute; left: 0; top: 0; display: none; padding: 0; border: 0; margin: 0; cursor: pointer; overflow: hidden; border-radius: 7px;
+  width: calc(var(--ch, var(--H)) * var(--a) + 2 * var(--pad)); height: calc(var(--ch, var(--H)) + var(--pad) + var(--cap));
+  margin-left: calc((var(--ch, var(--H)) * var(--a) + 2 * var(--pad)) / -2); margin-top: calc(-1 * (var(--ch, var(--H)) + var(--pad) + var(--cap)));
+  transform-origin: 50% 100%; will-change: transform, opacity; text-align: left;
+  background: #120d05; box-shadow: 0 18px 40px rgba(0, 0, 0, .55); }
+.card .pic { display: block; width: calc(var(--ch, var(--H)) * var(--a)); height: var(--ch, var(--H)); overflow: hidden; }
+.card img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; filter: grayscale(1); }
+/* le fil qui relie le tirage au disque */
+.card.top { cursor: zoom-in; }
+.card:focus-visible, .cell:focus-visible, .cell:focus, .card:focus { outline: none; }   /* pas de bordure dorée après une sélection */
+/* (plus de halo doré autour d'une photo ajoutée) */
+
+/* visionneuse : l'image en volume, rien d'autre */
+.viewer { position: fixed; inset: 0; z-index: 30; background: none; }
+.viewer canvas { opacity: 0; transition: opacity .45s ease; }
+.viewer.on canvas { opacity: 1; }
+.viewer canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: default; touch-action: none; }
+.viewer canvas.prise { cursor: grab; }   /* la main seulement au-dessus de l'image */
+.viewer canvas.prise:active { cursor: grabbing; }
+.fallback { position: absolute; inset: 8vh 8vw; width: calc(100% - 16vw); height: calc(100% - 16vh); object-fit: contain; }
+/* (plus de overflow: hidden pendant la vue en volume : sur Safari, le fond disparaissait) */
+
+/* glisser-déposer */
+.veil { position: fixed; inset: 12px; z-index: 40; display: none; place-items: center; border: 1px dashed var(--or); background: rgba(6, 6, 6, .82); pointer-events: none; }
+.veil span { font: 14px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--or-clair); }
+body.dragging .veil { display: grid; }
+
+.status { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 45; margin: 0; font: 12px var(--mono); color: var(--or-clair); pointer-events: none; }
+.status:empty { display: none; }
+
+.foot { position: fixed; left: 0; right: 0; bottom: 0; z-index: 150; padding: 260px clamp(16px, 3vw, 36px) 14px; font: 300 11px var(--mono); letter-spacing: .05em; color: var(--signal-2);
+  background: linear-gradient(rgba(5, 5, 5, 0), rgba(5, 5, 5, .55) 35%, rgba(5, 5, 5, .9) 65%, #050505 88%); pointer-events: none; }
+.foot a { color: var(--signal-2); pointer-events: auto; }
+
+/* réglages (temporaires, pour tester les rendus) */
+.settings-btn { display: none !important; }
+body.reglages .settings-btn { display: grid !important; }   /* touche R */
+.settings-btn { position: fixed; right: clamp(16px, 3vw, 36px); bottom: 16px; z-index: 160; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; cursor: pointer; }
+.settings-btn svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; }
+body.viewing .settings-btn { bottom: 70px; }
+.settings { position: fixed; right: 16px; bottom: 64px; z-index: 50; width: min(300px, calc(100vw - 32px)); max-height: calc(100vh - 140px); overflow: auto; padding: 16px;
+  background: rgba(10, 10, 9, .95); border: 1px solid var(--trait); font-size: 12.5px; }
+body.viewing .settings { bottom: 118px; max-height: calc(100vh - 200px); }
+.settings h2 { font: 400 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--signal-2); margin: 0 0 12px; }
+.settings h2 span { color: var(--alerte); margin-left: 6px; }
+.set-row { margin: 0 0 12px; }
+.set-row label { display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; color: var(--signal-3); }
+.set-row output { font: 11px var(--mono); color: var(--or-clair); }
+.set-row input[type=range], .set-row select { grid-column: 1 / -1; width: 100%; accent-color: var(--or); }
+.set-row select { font: 12px var(--mono); color: var(--papier); background: var(--noir-3); border: 1px solid var(--trait); padding: 6px; }
+.set-row .ck { display: flex; gap: 8px; align-items: flex-start; }
+.set-row .ck input { accent-color: var(--or); margin-top: 2px; }
+.set-row button { font: 11px var(--mono); background: none; border: 1px solid var(--trait); color: var(--signal-3); padding: 6px 10px; cursor: pointer; }
+.set-row a { font: 11px var(--mono); margin-left: 10px; }
+
+@media (max-width: 640px) {
+  .grid { gap: 10px; --h: 130px; }
+  .brand .word { font-size: 16px; letter-spacing: .08em; }
+  .brand .sous-titre { font-size: 12px; letter-spacing: .1em; }
+  .add { padding: 0; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cell { opacity: 1; transform: none; transition: none; }
+  .disc-body { transition: none; }
+}
+
+/* ─── l'accueil : le recto du disque, qu'il faut survoler ─── */
+body.welcome .top, body.welcome .grid, body.welcome .stage, body.welcome .foot, body.welcome .settings-btn { opacity: 0; pointer-events: none; }
+.top, .grid, .stage, .foot, .settings-btn { transition: opacity 2.6s ease; }
+.welcome-layer { position: fixed; inset: 0; z-index: 400; display: grid; place-items: center; align-content: center; gap: 34px; }
+.w-disc { --spin: 0deg; --near: 0; position: relative; width: min(66vmin, 615px); aspect-ratio: 1; perspective: 1400px; scale: .244;   /* dessiné à sa taille finale puis réduit : toujours net */ cursor: pointer; outline: none;
+  }
+.w-flip { position: absolute; inset: 0; transform-style: preserve-3d; }
+.w-face { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; backface-visibility: hidden; -webkit-backface-visibility: hidden; user-select: none;
+  transform: translateZ(calc(var(--ep) / 2)) rotate(var(--spin)); filter: saturate(.85); }
+.w-verso { transform: rotateX(180deg) translateZ(calc(var(--ep) / 2)) rotate(var(--spin)); }
+/* l'épaisseur du disque : une pile de fines couches dorées entre les deux faces ; de face on ne la voit pas,
+   de biais et sur la tranche elle donne un vrai bord, un peu plus sombre et brossé sur le pourtour */
+.w-disc { --ep: 4.9px; }
+.w-ep { position: absolute; inset: .4%; border-radius: 50%; pointer-events: none;
+  /* la tranche : sombre, pas dorée — seuls des reflets clairs, qui glissent avec le mouvement du disque */
+  background:
+    radial-gradient(circle, #0c0b09 0 86%, transparent 86.6%),
+    linear-gradient(calc(115deg + var(--flipdeg, 0deg) * .5), transparent 40%, rgba(235, 228, 210, .32) 50%, transparent 60%),
+    repeating-conic-gradient(from calc(var(--spin) * -1), rgba(220, 214, 200, .10) 0 .7deg, rgba(0, 0, 0, .3) .7deg 1.6deg, rgba(200, 195, 185, .06) 1.6deg 2.3deg),
+    radial-gradient(circle, #0e0d0b 0 88%, #1b1916 93%, #2c2925 96.5%, #1a1815 98.6%, #0a0908 100%); }
+.add.grave { color: var(--lumiere); text-shadow: var(--lueur); font-weight: 400; }
+
+.settings, .status { color: var(--lumiere); }
+
+/* les fils qui relient les images au disque gravé */
+.thread { position: absolute; left: 0; top: 0; width: 1px; height: 1px; display: none; transform-origin: 0 0; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(240, 214, 150, .9), rgba(226, 199, 132, .35)); }
+.anchor { position: absolute; left: -2.5px; top: -2.5px; width: 5px; height: 5px; display: none; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 244, 214, .95), rgba(226, 199, 132, .4) 60%, rgba(226, 199, 132, 0)); }
+
+/* pour le moment : pas de barre d'infos ni de dégradé en bas */
+.foot { display: none !important; }
+
+/* passage disque ⇄ grille : fondu lent */
+.grid, .stage { transition: opacity 1.4s ease; }
+.grid { transition: opacity .9s ease; }
+body.arrivee .stage { transition: none; }   /* le grand disque prend le relais de l'accueil sans fondu */
+/* bandeau du haut : dégradé noir deux fois plus haut */
+.top { background: none !important; z-index: 20; }
+/* le bandeau noir est sous les images du disque (elles passent devant), le logo et les boutons restent au-dessus */
+.top-fade { position: fixed; left: 0; right: 0; top: 0; height: 180px; z-index: 0; pointer-events: none;
+  background: linear-gradient(#050505 40%, rgba(5, 5, 5, .75) 62%, rgba(5, 5, 5, 0)); transition: opacity 2.6s ease; }
+body.welcome .top-fade { opacity: 0; }
+body.welcome.prechauffe .stage { opacity: .01; }   /* préparée juste avant la fin de l'accueil : déjà dessinée quand elle apparaît */
+body:not(.vue-disque) .top-fade { z-index: 15; }   /* galerie : les images passent sous la barre noire du haut */
+.stage { z-index: 1; }
+
+
+/* accueil : le disque bascule vers nous sur place (pivot sur son point le plus bas) jusqu'à être
+   parfaitement à plat, perpendiculaire à l'écran ; il disparaît à cet instant précis */
+
+/* ─── débogage de l'animation d'accueil (?debug3d) ─── */
+.welcome-layer.debug .w-recto { outline: 5px solid #ff3b3b; outline-offset: -5px; }
+.welcome-layer.debug .w-verso { outline: 5px solid #2f7bff; outline-offset: -5px; }
+.welcome-layer.debug .w-ep { background: #39d353; opacity: .9; }                         /* l'épaisseur : vert */
+.dbg-face { position: absolute; inset: 0; border-radius: 50%; display: flex; justify-content: center; align-items: flex-start; padding-top: 9%; pointer-events: none;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.dbg-face span { padding: 6px 12px; font: 700 26px var(--mono); line-height: 1.1; text-align: center; color: #fff; }
+.dbg-face::before { content: ''; position: absolute; left: calc(50% - 11px); top: 1.5%; width: 22px; height: 22px; border-radius: 50%; background: #fff; }   /* repère : le haut de la face, il tourne avec elle */
+.dbg-recto { transform: translateZ(calc(var(--ep) / 2 + 2px)) rotate(var(--spin)); }
+.dbg-recto span { background: rgba(255, 59, 59, .85); }
+.dbg-verso { transform: rotateX(180deg) translateZ(calc(var(--ep) / 2 + 2px)) rotate(var(--spin)); }
+.dbg-verso span { background: rgba(47, 123, 255, .85); }
+.dbg-normal { position: absolute; left: calc(50% - 3px); top: 50%; width: 6px; height: 45%; background: #ffd400; transform-origin: 50% 0; transform: rotateX(-90deg); }   /* la normale du recto (jaune) */
+.dbg-axe { position: absolute; pointer-events: none; }
+.dbg-x { left: -15%; right: -15%; top: calc(50% - 2px); height: 4px; background: #ff3b3b; }    /* axe X (rouge) : l'axe du retournement */
+.dbg-y { top: -15%; bottom: -15%; left: calc(50% - 2px); width: 4px; background: #39d353; }     /* axe Y (vert) */
+.dbg-hud { position: fixed; left: 16px; top: 16px; z-index: 500; margin: 0; padding: 12px 14px; font: 13px/1.5 ui-monospace, monospace; color: #fff;
+  background: rgba(0, 0, 0, .75); border: 1px solid #444; white-space: pre; pointer-events: none; }
+
+/* arrivée du disque : il monte seul ; images, fils, titre, boutons apparaissent ensuite en fondu */
+body.montee .top, body.montee .top-fade, body.montee .settings-btn { opacity: 0 !important; transition: none !important; }   /* les images montent avec le disque ; la barre du haut vient juste après */
+.plane-cartes, .shadows { transition: opacity 1.1s ease; }
+body.sans-images .plane-cartes, body.sans-images .shadows { opacity: 0; transition: none; }   /* à l'arrivée : le disque se met en place d'abord, les images viennent après */
+body.arrivee .top, body.arrivee .top-fade { transition: opacity 1.4s ease .2s; }
+
+/* ─── pré-accueil : l'histoire en quatre temps, un seul écran ─────────────────────────────── */
+.prelude { position: fixed; inset: 0; z-index: 450; display: grid; grid-template-rows: auto 1fr auto; justify-items: center; align-items: center;
+  gap: clamp(14px, 3vh, 34px); padding: clamp(18px, 4vh, 44px) clamp(16px, 4vw, 64px); color: var(--lumiere); transition: opacity 1s ease; }
+.prelude.part { opacity: 0; pointer-events: none; }
+.p-titre { display: grid; justify-items: center; line-height: .8; }
+.prelude .word { font: 400 32px 'Bagerich', var(--mono); letter-spacing: .1em; }
+.prelude .sous-titre { margin-top: 5px; font: 400 22px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.p-ecrans { list-style: none; margin: 0; padding: 0; width: min(1240px, 100%); display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 2.4vw, 36px); align-items: start; }
+.p-ecran h2 { margin: 14px 0 6px; font: 400 14px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+.p-n { margin-right: .8em; opacity: .55; }
+.p-ecran p { margin: 0; font: 300 13px/1.55 var(--mono); letter-spacing: .02em; color: rgba(255, 255, 255, .78); }
+/* le même cadre pour les quatre : un vieux tirage (teinte passée, grain, coins assombris) */
+.p-tirage { position: relative; margin: 0; aspect-ratio: 4 / 5; max-height: 44vh; width: 100%; overflow: hidden; border-radius: 4px; background: #111;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), 0 18px 40px rgba(0, 0, 0, .55); }
+.p-tirage img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.38) saturate(.7) contrast(1.06) brightness(.9); }
+.p-tirage img.absente { visibility: hidden; }
+.p-tirage::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: radial-gradient(120% 95% at 50% 45%, transparent 55%, rgba(0, 0, 0, .55) 100%); }
+.p-tirage::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; opacity: .22; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E"); }
+.p-tirage figcaption { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 18px 10px 7px; font: 300 10px var(--mono); letter-spacing: .04em;
+  color: rgba(255, 255, 255, .62); background: linear-gradient(transparent, rgba(0, 0, 0, .6)); }
+.p-ecouter { display: inline-flex; align-items: center; gap: 12px; padding: 0; height: 48px; background: none; border: 0; color: var(--lumiere); cursor: pointer;
+  font: 18px var(--mono); letter-spacing: .14em; text-transform: uppercase; -webkit-text-stroke: .35px var(--lumiere); }
+.p-ecouter::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--lumiere); box-shadow: 0 0 0 5px rgba(255, 255, 255, .12); }
+.p-ecouter:focus-visible { outline: none; }
+@media (max-width: 900px) {
+  .p-ecrans { grid-template-columns: repeat(2, 1fr); }
+  .p-tirage { aspect-ratio: 16 / 10; max-height: 22vh; }
+  .prelude { overflow: auto; align-items: start; }
+}

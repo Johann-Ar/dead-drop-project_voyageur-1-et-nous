@@ -1,0 +1,59 @@
+.top { padding: 28px 32px 20px; border-bottom: 1px solid var(--trait); display: grid; gap: 6px; }
+.brand { font: 400 12px var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--or); text-decoration: none; }
+.brand span { color: var(--signal-2); }
+.top h1 { font: 400 40px/1.05 var(--texte); margin: 4px 0 0; letter-spacing: -.01em; }
+.lede { max-width: 72ch; margin: 4px 0 0; color: var(--signal-3); }
+
+.layout { display: grid; grid-template-columns: 300px 1fr; min-height: calc(100vh - 140px); }
+.panel { border-right: 1px solid var(--trait); padding: 20px 22px 60px; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow: auto; }
+.panel h2 { font: 400 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--signal-2); margin: 22px 0 10px; }
+.panel > h2:first-child { margin-top: 0; }
+.group h2 { margin-top: 24px; }
+.field { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; margin: 0 0 12px; font-size: 13px; }
+.field label { color: var(--signal-3); }
+.field output { font: 12px var(--mono); color: var(--or-clair); }
+.field input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--or); }
+.field .hint { grid-column: 1 / -1; font-size: 11.5px; color: var(--signal-1); line-height: 1.35; }
+.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--papier); margin: 14px 0 6px; }
+.toggle input { accent-color: var(--or); }
+.group.off .field { opacity: .35; }
+select, button { font: 12px var(--mono); letter-spacing: .04em; color: var(--papier); background: var(--noir-3); border: 1px solid var(--trait); padding: 8px 10px; border-radius: 2px; }
+select { width: 100%; }
+button { cursor: pointer; }
+button:hover { border-color: var(--or-sombre); color: var(--or-clair); }
+button.primary { border-color: var(--or-sombre); color: var(--or); }
+button:disabled { opacity: .4; cursor: wait; }
+.actions { display: grid; gap: 8px; margin-top: 18px; }
+.preset-desc { font-size: 12px; color: var(--signal-2); margin: 8px 0 0; }
+.log { font: 11px/1.45 var(--mono); color: var(--signal-2); white-space: pre-wrap; margin-top: 12px; max-height: 180px; overflow: auto; }
+
+main { padding: 20px 28px 80px; min-width: 0; }
+.summary { display: flex; flex-wrap: wrap; gap: 28px; align-items: baseline; padding: 4px 0 18px; border-bottom: 1px solid var(--trait); }
+.stat { display: grid; gap: 2px; }
+.stat b { font: 400 30px/1 var(--mono); color: var(--or-clair); font-weight: 300; }
+.stat span { font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--signal-2); }
+.summary .note { font-size: 12px; color: var(--signal-1); max-width: 46ch; }
+
+.pairs { display: grid; gap: 34px; margin-top: 26px; }
+.pair header { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; margin-bottom: 10px; }
+.pair .id { font: 12px var(--mono); color: var(--or); letter-spacing: .08em; }
+.pair .title { font-size: 17px; }
+.pair .meta { font: 11px var(--mono); color: var(--signal-2); }
+.pair .scores { margin-left: auto; font: 12px var(--mono); color: var(--signal-3); }
+.pair .scores b { color: var(--or-clair); font-weight: 400; }
+.strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.strip.portrait { grid-template-columns: repeat(4, minmax(0, 190px)); }
+figure { margin: 0; }
+figure canvas { width: 100%; height: auto; background: var(--noir-2); }
+figcaption { font: 10.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--signal-2); margin-top: 6px; }
+figcaption.gold { color: var(--or); }
+.pending canvas { opacity: .25; }
+.credit { font-size: 12px; color: var(--signal-1); margin-top: 8px; }
+.credit .verif { color: var(--alerte); font: 11px var(--mono); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .panel { position: static; max-height: none; border-right: 0; border-bottom: 1px solid var(--trait); }
+  .strip, .strip.portrait { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .top, main { padding-left: 16px; padding-right: 16px; }
+}

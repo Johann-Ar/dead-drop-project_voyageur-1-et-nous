@@ -1,0 +1,43 @@
+/*
+ * DEADDROP SpatialBox — base.
+ * Palette : noir profond, gris du signal, or du disque. La couleur n'entre qu'avec les images couleur.
+ * Polices (Velvetyne, SIL OFL 1.1) — à déposer dans public/fonts/ (voir README) :
+ *   Steps Mono (J.-B. Morizot & R. Bastide) pour les données ; Karrik (J.-B. Morizot & L. Le Bihan) pour le texte.
+ */
+/* TRIAL-Vargas (alex-creq) — version d'essai, voir CREDITS.md : Black pour les titres, Regular pour le texte, Light pour les infos */
+@font-face { font-family: 'Vargas'; src: url('/fonts/TRIAL-Vargas-Black.otf') format('opentype'); font-weight: 900; font-display: swap; }
+@font-face { font-family: 'Vargas'; src: url('/fonts/TRIAL-Vargas-Regular.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Vargas'; src: url('/fonts/TRIAL-Vargas-Light.otf') format('opentype'); font-weight: 300; font-display: swap; }
+@font-face { font-family: 'Steps Mono'; src: url('/fonts/StepsMono-Thin.woff2') format('woff2'); font-weight: 200 400; font-display: swap; }
+@font-face { font-family: 'Steps Mono'; src: url('/fonts/StepsMono-Regular.woff2') format('woff2'); font-weight: 500 800; font-display: swap; }
+@font-face { font-family: 'Bagerich'; src: url('/fonts/BagerichDemo.otf') format('opentype'); font-display: swap; }   /* essai pour « ET NOUS » (version démo) */
+@font-face { font-family: 'Karrik'; src: url('/fonts/Karrik-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Karrik'; src: url('/fonts/Karrik-Italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+
+:root {
+  --noir: #060606;
+  --noir-2: #0e0e0d;
+  --noir-3: #171716;
+  --trait: #2a2a28;
+  --signal-1: #5d5d59;   /* gris du signal, sombre */
+  --signal-2: #8e8e88;
+  --signal-3: #c4c4bd;
+  --papier: #ffffff;
+  --or: #cb910f;   /* tirés de la texture or brossé (matiere-or.jpg) */
+  --or-clair: #f2c029;
+  --or-sombre: #a46901;
+  --alerte: #d06a4a;
+  --mono: 'Vargas', 'Steps Mono', ui-monospace, monospace;
+  --texte: 'Vargas', 'Karrik', ui-sans-serif, system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; background: var(--noir); color: var(--papier); }
+body { font: 15px/1.5 var(--texte); -webkit-font-smoothing: antialiased; }
+a { color: var(--or); text-underline-offset: 3px; }
+a:hover { color: var(--or-clair); }
+em { font-style: italic; color: var(--signal-3); }
+:focus-visible { outline: 1px solid var(--or); outline-offset: 2px; }
+canvas { image-rendering: auto; display: block; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

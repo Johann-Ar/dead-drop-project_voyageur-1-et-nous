@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="/disque/favicon.png" />
+  <link rel="apple-touch-icon" href="/disque/apple-touch-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DEADDROP · Calibration</title>
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/calibration.css" />
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/">DEADDROP <span>calibration</span></a>
+    <h1>Calibration</h1>
+    <p class="lede">
+      Les images NASA (<em>ce qu'on a envoyé</em>) passent dans notre chaîne — balayage, son, canal, décodage —
+      et sont comparées aux décodages de Ron Barry (<em>ce qui a voyagé</em>). Plus l'écart est faible, plus la
+      simulation ressemble au vrai disque.
+    </p>
+  </header>
+
+  <div class="layout">
+    <aside class="panel" id="panel" aria-label="Réglages de la chaîne"></aside>
+    <main>
+      <section class="summary" id="summary" aria-live="polite"></section>
+      <section id="pairs" class="pairs"></section>
+    </main>
+  </div>
+
+  <script type="module" src="/src/calibration/page.ts"></script>
+</body>
+</html>
